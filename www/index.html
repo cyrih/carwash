@@ -1,344 +1,401 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--    <meta name="viewport" content="user-scalable=no, initial-scale=1, width=device-width" /><!-- Do not change this! -->
-    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--    <meta name="viewport" content="user-scalable=no, initial-scale=1, width=device-width" /><!-- Do not change this! -->
 
-<link rel="stylesheet" href="./css/jquery.mobile-1.4.4.min.css">
+    <link rel="stylesheet" href="./css/jquery.mobile-1.4.4.min.css">
 
     <!-- jQuery -->
     <script type="text/javascript" src="./js/jquery-2.1.1.min.js"></script>
-    
+
     <!-- jQuery Mobile -->
     <script src="./js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="./js/jquery.mobile.settings.js"></script><!-- this must be loaded before jQuery Mobile -->
-    <script type="text/javascript" src="./js/jquery.mobile-1.4.2.min.js"></script>
+    <script type="text/javascript" src="./js/jquery.mobile-1.4.4.min.js"></script>
 
-  <script type="text/javascript" >
-// Custom Script
-var p = 1,
-    b = 1;
-$(document).one('pagebeforecreate', function () {
-    $.mobile.pageContainer.find("[data-role=page]").each(function () {
-        var panel = '<div data-role="panel" id="mypanel' + p + '" data-display="push" data-theme="b"> \
- <h1>Menu</h1><ul data-role="listview" data-inset="true"> \
- <li><a href="#pageone" >Hauptseite</a></li> \
- <li><a href="#pageCash" >Umsatzdaten</a></li> \
- <li><a href="#pageSettings" >Einstellungen</a></li> \
- </ul></div>';
-        
-        $(this).prepend(panel);
-        p++;
-    });
-    $.mobile.pageContainer.find("[data-role=header]").each(function () {
-        var panelBtn = '<a href="#mypanel' + b + '" class="ui-btn ui-btn-left ui-btn-icon-notext ui-icon-grid ui-corner-all"></a>'
-        $(this).append(panelBtn);
-        b++;
-    });
-});
+    <!-- jQuery Mobile DateBox-->
+    <link rel="stylesheet" type="text/css" href="./css/jqm-datebox-1.4.4.css">
+    <script type="text/javascript" src="./js/jqm-datebox-1.4.4.js"></script>
 
-</script>
+    <script type="text/javascript" charset="utf-8">
+            // Custom Script
+      var p = 1,
+      b = 1;
+      $(document).one('pagebeforecreate', function () {
+      $.mobile.pageContainer.find("[data-role=page]").each(function () {
+      var panel = '<div data-role="panel" id="mypanel' + p + '" data-display="push" data-theme="b"> \
+      <h1>Menu</h1><ul data-role="listview" data-inset="true"> \
+      <li><a href="#pageone" >Hauptseite</a></li> \
+      <li><a href="#pageCash" >Umsatzdaten</a></li> \
+      <li><a href="#pageSettings" >Einstellungen</a></li> \
+      </ul></div>';
 
+      $(this).prepend(panel);
+      p++;
+      });
+      $.mobile.pageContainer.find("[data-role=header]").each(function () {
+      var panelBtn = '<a href="#mypanel' + b + '" class="ui-btn ui-btn-left ui-btn-icon-notext ui-icon-grid ui-corner-all"></a>'
+      $(this).append(panelBtn);
+      b++;
+      });
+      });
+    </script>
 
-<script type="text/javascript"  charset="utf-8">
+    <script type="text/javascript"  charset="utf-8">
+      $(document).ready(function() {
+        // Get the Current Status o
 
-  $( document ).ready(function() {
-    // Get the Current Status o
-       
-    LoadStatus_onclick();
-    
-    console.log('Document.ready');
-  
-//$('#flip-WP1').change(function() {
-  $('.emergency-off-flip').change(function() {
-    var myswitch = $(this);
-    var myWPNO = $(this).attr('name');
-    var myStatus   = myswitch[0].selectedIndex == 1 ? true:false;
-    
-    
-    if(myStatus) {
-      myStatusText = "Einschalten";
-    } else {
-      myStatusText = "Abschalten";
-    }
-    
-  //console.log('Flip: ' + $(this).attr('name'));
-    
-    //if (myswitch[0].selectedIndex == 0) {
-      myWPNO = myWPNO.substr(myWPNO.length - 1, myWPNO.length);
+        LoadStatus_onclick();
 
-      // update current WP-Number in the dialog 
-      $("#popupWPInfoID").text(myWPNO);
-      $("#popupWPInfoOperation").text(myStatusText);
-      $("#popupButtonAction").text(myStatusText);
+        console.log('Document.ready');
 
-      // Set custom attributes for later interaction
-      $("#popupButtonAction").attr("curWPID", myWPNO);
-      $("#popupButtonAction").attr("curWPStatus", myStatus);
+        //$('#flip-WP1').change(function() {
+        $('.emergency-off-flip').change(function() {
+          var myswitch = $(this);
+          var myWPNO = $(this).attr('name');
+          var myStatus = myswitch[0].selectedIndex == 1 ? true : false;
+
+          if (myStatus) {
+            myStatusText = "Einschalten";
+          } else {
+            myStatusText = "Abschalten";
+          }
+
+          //console.log('Flip: ' + $(this).attr('name'));
+
+          //if (myswitch[0].selectedIndex == 0) {
+          myWPNO = myWPNO.substr(myWPNO.length - 1, myWPNO.length);
+
+          // update current WP-Number in the dialog
+          $("#popupWPInfoID").text(myWPNO);
+          $("#popupWPInfoOperation").text(myStatusText);
+          $("#popupButtonAction").text(myStatusText);
+
+          // Set custom attributes for later interaction
+          $("#popupButtonAction").attr("curWPID", myWPNO);
+          $("#popupButtonAction").attr("curWPStatus", myStatus);
+
+          $("#popupDialogEmergency").popup("open");
+          //}
+        });
+
+        $('#popupButtonAction').click(function() {
+          var curID = $("#popupButtonAction").attr("curWPID");
       
-      
-      $("#popupDialogEmergency").popup("open");
-    //}
-});
-
-$('#popupButtonAction').click(function() {
-  var curID = $("#popupButtonAction").attr("curWPID");
-  
-  console.log("execute ID:" + $("#popupButtonAction").attr("curWPID") + " / action: " + $("#popupButtonAction").attr("curWPStatus"));
-  // send the Request to the webservice
-
-$.ajax({
-                       type: "POST",
-                       contentType: "application/json; charset=utf-8",
-                       dataType: "jsonp",
-                       jsonpCallback: 'jsonCallbackSetValue',
-                       url:    "http://waschanlage.dlinkddns.com:8088/parser/control.php",
-                       data:   'action=setValue&type=OFF_SWITCH' + curID,
-                       //success: jsonCallback,
-                       error: function(error, msg) {
-                          console.log("Error" + error.status + " / " + msg);
-                        }
-                       });
-});
-
-$('#popupButtonCancel').click(function() {
-  // Force a Status-Reload
-  LoadStatus_onclick();
-});
-
-
-
-});
-  
-function jsonCallbackSetValue (data) {
-  if (data['status'] != '1') {
-    alert('ACHTUNG: Fehler beim Schalten!');
-  }
-  // Reload Data
-  LoadStatus_onclick();
-};
-
-
-function jsonCallback (data) {
-    // Cleanup
-    $("#cashToday" ).empty();
-    $("#cashToday").append('<li id="curDate" name="head" >Datum: ' + data['date'] + '</li>' );
-    $("#cashToday").append('<li id="curWP1" name="head" >Waschplatz 1: ' + data['wp1'] + '</li>' );
-    $("#cashToday").append('<li id="curWP2" name="head" >Waschplatz 2: ' + data['wp2'] + '</li>' );
-    $("#cashToday").append('<li id="curWP3" name="head" >Waschplatz 3: ' + data['wp3'] + '</li>' );
-    $("#cashToday").append('<li id="curChanger" name="head" >Wechsler: ' + data['changer'] + '</li>' );
-    
-    curSum = parseFloat(data['wp1']) + 
-             parseFloat(data['wp2']) + 
-             parseFloat(data['wp3']) + 
-             parseFloat(data['changer']);
-    $("#cashToday").append('<li id="Gesamt" name="head"><b>Gesamt: ' + curSum + '</b></li>' );
-
-    console.log(data);
-};
-
-  
-function jsonCallbackAllSensors (data) {
-  var flipvalues = {"1":"on",
-                    "0":"off"
-                    };    
-
-  console.log(data);
-  $('#flip-WP1').val(flipvalues[data['OFF_SENS1']]).slider("refresh");
-  $('#flip-WP2').val(flipvalues[data['OFF_SENS2']]).slider("refresh");
-  $('#flip-WP3').val(flipvalues[data['OFF_SENS3']]).slider("refresh"); 
-}  
-  
-    function LoadSensStatus(type) 
-    {
-       $.ajax({
-                       type: "POST",
-                       contentType: "application/json; charset=utf-8",
-                       dataType: "jsonp",
-                       jsonpCallback: 'jsonCallbackAllSensors',
-                       url:    "http://waschanlage.dlinkddns.com:8088/parser/control.php",
-                       data: 'action=getstatus&type=' + type,
-                       //success: jsonCallbackWP,
-                       error: function(error, msg) {
-                          console.log("Error" + error.status + " / " + msg);
-                        }
-                       });
-    }
-  
-   
-     function LoadCashStatus() {
-       var today = new Date();
-       var dd = today.getDate();
-       var mm = today.getMonth()+1; //January is 0!
-       var yyyy = today.getFullYear();
-       // Load Cash-Status  
-                $.ajax({
-                       type: "POST",
-                       contentType: "application/json; charset=utf-8",
-                       dataType: "jsonp",
-                       jsonpCallback: 'jsonCallback',
-                       url:    "http://waschanlage.dlinkddns.com:8088/parser/query.php",
-                       data: 'action=query&day=' + dd + '&month=' + mm + '&year=' + yyyy,
-                       //success: jsonCallback,
-                       error: function(error, msg) {
-                          console.log("Error" + error.status + " / " + msg);
-                        }
-                       });
-
-
+          console.log("execute ID:" + $("#popupButtonAction").attr("curWPID") + " / action: " + $("#popupButtonAction").attr("curWPStatus"));
+          // send the Request to the webservice
+          
+          
+          $.ajax({
+            type : "POST",
+            contentType : "application/json; charset=utf-8",
+            dataType : "jsonp",
+            jsonpCallback : 'jsonCallbackSetValue',
+            url : "http://waschanlage.dlinkddns.com:8088/parser/control.php",
+            data : 'action=setValue&type=OFF_SWITCH' + curID + '&value=1',
+            //success: jsonCallback,
+            error : function(error, msg) {
+              console.log("Error" + error.status + " / " + msg);
             }
-            
-            
-function LoadStatus_onclick() {
-  var $this = $( this ),
-        theme = $this.jqmData( "theme" ) || $.mobile.loader.prototype.options.theme,
-        msgText = "Lade Daten"; // $this.jqmData( "msgtext" ) || $.mobile.loader.prototype.options.text,
-        textVisible = "true"; // $this.jqmData( "textvisible" ) || $.mobile.loader.prototype.options.textVisible,
-        textonly = "false"; // !!$this.jqmData( "textonly" );
-        html = $this.jqmData( "html" ) || "";
-    $.mobile.loading( "show", {
-            text: "Lade Daten",
-            textVisible: "true",
-            theme: "" ,
-            textonly: false,
-            html: ""
-    });
-  
-  // Cash-Stats
-   LoadCashStatus();
-   
-   LoadSensStatus('GET_SENS_ALL')
-  
-    $.mobile.loading( "hide" ); // Hide Loader
-    
-}
-  
+          });
+        });
 
-</script>
+        $('#popupButtonCancel').click(function() {
+          // Force a Status-Reload
+          LoadStatus_onclick();
+        });
+
+      });
+
+      function jsonCallbackSetValue(data) {
+        if (data['status'] != '1') {
+          alert('ACHTUNG: Fehler beim Schalten!');
+        }
+        // Reload Data
+        LoadStatus_onclick();
+      };
+
+      function jsonCallback(data) {
+        // Cleanup
+        $("#cashToday").empty();
+        $("#cashToday").append('<li id="curDate" name="head" >Datum: ' + data['date'] + '</li>');
+        $("#cashToday").append('<li id="curWP1" name="head" >Waschplatz 1: ' + data['wp1'] + '</li>');
+        $("#cashToday").append('<li id="curWP2" name="head" >Waschplatz 2: ' + data['wp2'] + '</li>');
+        $("#cashToday").append('<li id="curWP3" name="head" >Waschplatz 3: ' + data['wp3'] + '</li>');
+        $("#cashToday").append('<li id="curChanger" name="head" >Wechsler: ' + data['changer'] + '</li>');
+
+        curSum = parseFloat(data['wp1']) + parseFloat(data['wp2']) + parseFloat(data['wp3']) + parseFloat(data['changer']);
+        $("#cashToday").append('<li id="Gesamt" name="head"><b>Gesamt: ' + curSum + '</b></li>');
+
+        console.log(data);
+      };
+
+      function jsonCallbackAllSensors(data) {
+        var flipvalues = {
+          "1" : "on",
+          "0" : "off"
+        };
+
+        console.log(data);
+        $('#flip-WP1').val(flipvalues[data['OFF_SENS1']]).slider("refresh");
+        $('#flip-WP2').val(flipvalues[data['OFF_SENS2']]).slider("refresh");
+        $('#flip-WP3').val(flipvalues[data['OFF_SENS3']]).slider("refresh");
+      }
+
+      function LoadSensStatus(type) {
+        $.ajax({
+          type : "POST",
+          contentType : "application/json; charset=utf-8",
+          dataType : "jsonp",
+          jsonpCallback : 'jsonCallbackAllSensors',
+          url : "http://waschanlage.dlinkddns.com:8088/parser/control.php",
+          data : 'action=getstatus&type=' + type,
+          //success: jsonCallbackWP,
+          error : function(error, msg) {
+            console.log("Error" + error.status + " / " + msg);
+          }
+        });
+      }
 
 
-</head>
-<body>
 
-<div data-role="page" id="pageone"  data-theme="a">
-  <div data-role="header"  data-theme="b" data-position="fixed">
-    <h1>Carwash-Control </h1>
-  </div>
 
-  <div data-role="main" class="ui-content">
-    
 
-    
-    <p><img src="img/carwash_logo_klein.jpg" width="100%"></p>
-    
-    <h2>Aktueller Status</h2>
-    <input id="ButtonLoadStatus" type="button" value="Aktualisieren" onclick="LoadStatus_onclick()" />
 
-    <p>Umsatz heute: </p>
-    <ul id="cashToday">
-    </ul>
-    
-     
-<style type="text/css" media="screen">
-      .containing-element .ui-slider-switch { width: 9em; }
-      </style>
 
-  <div id="EmergencyControl" >
-    <div class="ui-field-contain">
-      <label for="flip-WP1">Waschplatz 1:</label>
-        <select name="flip-WP1" id="flip-WP1" class="emergency-off-flip" data-role="slider" data-track-theme="a" data-theme="a">
-          <option value="off">AUS</option>
-          <option value="on">AN</option>
-        </select> 
-    </div>
 
-    <div class="ui-field-contain">
-      <label for="flip-WP2">Waschplatz 2:</label>
-        <select name="flip-WP2" id="flip-WP2" class="emergency-off-flip" data-role="slider" data-track-theme="a" data-theme="a">
-          <option value="off">AUS</option>
-          <option value="on">AN</option>
-        </select> 
-    </div>
-
-    <div class="ui-field-contain">
-      <label for="flip-WP3">Waschplatz 3:</label>
-        <select name="flip-WP3" id="flip-WP3" class="emergency-off-flip" data-role="slider" data-track-theme="a" data-theme="a">
-          <option value="off">AUS</option>
-          <option value="on">AN</option>
-        </select> 
-    </div>
-
-<!--
-<a href="#popupDialogEmergency" data-rel="popup" data-position-to="window" data-role="button" data-inline="true" data-transition="pop" data-icon="delete" data-theme="b">Popup-Test</a>
-  -->
-
-<!-- Popup-Dialog for Emergency-Confirmation -->
-    <div data-role="popup" id="popupDialogEmergency" data-overlay-theme="a" data-theme="c" data-dismissible="false" style="max-width:400px;" class="ui-corner-all">
-    <div data-role="header" data-theme="a" class="ui-corner-top">
-        <h1>NOT-AUS</h1>
-    </div>
+      function jsonCallbackCashDetail(data) {
         
-    <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
-        <h3 class="ui-title">Wirklich den Waschplatz <b id="popupWPInfoID"></b> <b id="popupWPInfoOperation"></b>?</p>
-        <a href="#" id="popupButtonCancel" data-role="button" data-inline="true" data-rel="back" data-theme="c">Abbrechen</a>
-        <a href="#" id="popupButtonAction" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-theme="b">Abschalten</a>
+        
+        curSum = parseFloat(data['wp1']) + parseFloat(data['wp2']) + parseFloat(data['wp3']) + parseFloat(data['changer']);
+        
+        
+        var $tr = $('<tr>').append(
+          $('<td>').text(data['date']),
+          $('<td>').text(data['wp1']),
+          $('<td>').text(data['wp2']),
+          $('<td>').text(data['wp3']),
+          $('<td>').text(data['changer']),
+          $('<td>').text(curSum)
+        );
+        
+        $("#cashDetail").append($tr);
+        
+      };
+
+      function LoadCashStatusDetail() {
+        // Cleanup
+        
+        $("#cashDetails.tr:has(td)").remove();
+        //$("#<%=cashDetail%> > tbody > tr").remove();
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        //January is 0!
+        var yyyy = today.getFullYear();
+        // Load Cash-Status
+        $.ajax({
+          type : "POST",
+          contentType : "application/json; charset=utf-8",
+          dataType : "jsonp",
+          jsonpCallback : 'jsonCallbackCashDetail',
+          url : "http://waschanlage.dlinkddns.com:8088/parser/query.php",
+          data : 'action=query&day=' + dd + '&month=' + mm + '&year=' + yyyy,
+          //success: jsonCallback,
+          error : function(error, msg) {
+            console.log("Error" + error.status + " / " + msg);
+          }
+        });
+
+      }
+
+      function LoadCashStatus() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        //January is 0!
+        var yyyy = today.getFullYear();
+        // Load Cash-Status
+        $.ajax({
+          type : "POST",
+          contentType : "application/json; charset=utf-8",
+          dataType : "jsonp",
+          jsonpCallback : 'jsonCallback',
+          url : "http://waschanlage.dlinkddns.com:8088/parser/query.php",
+          data : 'action=query&day=' + dd + '&month=' + mm + '&year=' + yyyy,
+          //success: jsonCallback,
+          error : function(error, msg) {
+            console.log("Error" + error.status + " / " + msg);
+          }
+        });
+
+      }
+
+      function LoadStatus_onclick() {
+        var $this = $(this), theme = $this.jqmData("theme") || $.mobile.loader.prototype.options.theme, msgText = "Lade Daten";
+        // $this.jqmData( "msgtext" ) || $.mobile.loader.prototype.options.text,
+        textVisible = "true";
+        // $this.jqmData( "textvisible" ) || $.mobile.loader.prototype.options.textVisible,
+        textonly = "false";
+        // !!$this.jqmData( "textonly" );
+        html = $this.jqmData("html") || "";
+        $.mobile.loading("show", {
+          text : "Lade Daten",
+          textVisible : "true",
+          theme : "",
+          textonly : false,
+          html : ""
+        });
+
+        // Cash-Stats
+        LoadCashStatus();
+
+        LoadSensStatus('GET_SENS_ALL')
+
+        $.mobile.loading("hide");
+        // Hide Loader
+
+      }
+
+    </script>
+
+  </head>
+  <body>
+
+    <div data-role="page" id="pageone"  data-theme="a">
+      <div data-role="header"  data-theme="b" data-position="fixed">
+        <h1>Carwash-Control </h1>
+      </div>
+
+      <div data-role="main" class="ui-content">
+
+        <p><img src="img/carwash_logo_klein.jpg" width="100%">
+        </p>
+
+        <h2>Aktueller Status</h2>
+        <input id="ButtonLoadStatus" type="button" value="Aktualisieren" onclick="LoadStatus_onclick()" />
+
+        <p>
+          Umsatz heute:
+        </p>
+        <ul id="cashToday"></ul>
+
+        <style type="text/css" media="screen">
+          .containing-element .ui-slider-switch {
+            width: 9em;
+          }
+        </style>
+
+        <div id="EmergencyControl" >
+          <div class="ui-field-contain">
+            <label for="flip-WP1">Waschplatz 1:</label>
+            <select name="flip-WP1" id="flip-WP1" class="emergency-off-flip" data-role="slider" data-track-theme="a" data-theme="a">
+              <option value="off">AUS</option>
+              <option value="on">AN</option>
+            </select>
+          </div>
+
+          <div class="ui-field-contain">
+            <label for="flip-WP2">Waschplatz 2:</label>
+            <select name="flip-WP2" id="flip-WP2" class="emergency-off-flip" data-role="slider" data-track-theme="a" data-theme="a">
+              <option value="off">AUS</option>
+              <option value="on">AN</option>
+            </select>
+          </div>
+
+          <div class="ui-field-contain">
+            <label for="flip-WP3">Waschplatz 3:</label>
+            <select name="flip-WP3" id="flip-WP3" class="emergency-off-flip" data-role="slider" data-track-theme="a" data-theme="a">
+              <option value="off">AUS</option>
+              <option value="on">AN</option>
+            </select>
+          </div>
+
+          <!--
+          <a href="#popupDialogEmergency" data-rel="popup" data-position-to="window" data-role="button" data-inline="true" data-transition="pop" data-icon="delete" data-theme="b">Popup-Test</a>
+          -->
+
+          <!-- Popup-Dialog for Emergency-Confirmation -->
+          <div data-role="popup" id="popupDialogEmergency" data-overlay-theme="a" data-theme="c" data-dismissible="false" style="max-width:400px;" class="ui-corner-all">
+            <div data-role="header" data-theme="a" class="ui-corner-top">
+              <h1>NOT-AUS</h1>
+            </div>
+
+            <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+              <h3 class="ui-title">Wirklich den Waschplatz <b id="popupWPInfoID"></b><b id="popupWPInfoOperation"></b>?</p> <a href="#" id="popupButtonCancel" data-role="button" data-inline="true" data-rel="back" data-theme="c">Abbrechen</a><a href="#" id="popupButtonAction" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-theme="b">Abschalten</a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div data-role="footer" data-theme="b" data-position="fixed">
+        <!--<h1>Page Footer</h1>-->
+      </div>
     </div>
-</div>
+
+    <div data-role="page" id="pageCash">
+      <div data-role="header" data-theme="b" data-position="fixed">
+        <h1>Carwash-Control</h1>
+      </div>
+
+      <div data-role="main" class="ui-content">
+        <h2>Umsatzauswertung</h2>
+
+        <p>
+          <label for="dateStart">Datum von:</label>
+          <input id="dateStart" type="text" data-role="datebox" data-options='{"mode":"flipbox", "useSetButton":true, "useInline":false, "overrideSetTimeButtonLabel":"Datum auswählen", "defaultValue":"new Date()", "showInitialValue":true}'>
+
+          <label for="dateEnd">Datum bis:</label>
+          <input id="dateEnd" type="text" data-role="datebox" data-options='{"mode":"flipbox", "useSetButton":true, "useInline":false, "overrideSetTimeButtonLabel":"Datum auswählen", "defaultValue":"new Date()", "showInitialValue":true}'>
+        </p>
+
+        <input id="ButtonLoadCash" type="button" value="Aktualisieren" onclick="LoadCashStatusDetail()" />
 
 
-
-  </div>
-
-  </div>
-
-  <div data-role="footer" data-theme="b" data-position="fixed">
-    <!--<h1>Page Footer</h1>-->
-  </div> 
-</div> 
-
-
-
-
-
-<div data-role="page" id="pageCash">
-  <div data-role="header" data-theme="b" data-position="fixed">
-    <h1>Carwash-Control</h1>
-  </div>
-
-  <div data-role="main" class="ui-content">
-    <h2>Umsatzauswertung</h2>
-    <p>Detaillierte Umstazauswertungen werden hier entstehen</p>
+        <table id="cashDetail" data-role="table" data-mode="columntoggle" data-column-btn-text="Auswählen...">
+  <thead>
+    <tr>
+      <th class="label">Datum</th>
+      <th>WP 1</th>
+      <th>WP 2</th>
+      <th>WP 3</th>
+      <th>Sauger</th>
+      <th><h3>Gesamt</h3></th>
+    </tr>
+  </thead>
+  <tbody>
     
-    <p>Date-Spinner</p>
-    
-    <a href="#pageone">Zurück</a>
-  </div>
+  </tbody>
+        </table>
 
-  <div data-role="footer" data-theme="b" data-position="fixed">
-<!--<h1>Page Footer</h1>-->
-  </div>
-</div> 
+        <a href="#pageone">Zurück</a>
+      </div>
 
+      <div data-role="footer" data-theme="b" data-position="fixed">
+        <!--<h1>Page Footer</h1>-->
+      </div>
+    </div>
 
+    <div data-role="page" id="pageSettings">
+      <div data-role="header" data-theme="b" data-position="fixed">
+        <h1>Carwash-Control</h1>
+      </div>
 
+      <div data-role="main" class="ui-content">
+        <h2>Einstellungen</h2>
+        <a href="#pageone">Zurück</a>
+      </div>
 
-<div data-role="page" id="pageSettings">
-  <div data-role="header" data-theme="b" data-position="fixed">
-    <h1>Carwash-Control</h1>
-  </div>
+      <div data-role="footer" data-theme="b" data-position="fixed">
+        <!--<h1>Page Footer</h1>-->
+      </div>
+    </div>
 
-  <div data-role="main" class="ui-content">
-    <h2>Einstellungen</h2>
-    <a href="#pageone">Zurück</a>
-  </div>
-
-  <div data-role="footer" data-theme="b" data-position="fixed">
-<!--<h1>Page Footer</h1>-->
-  </div>
-</div> 
-
-</body>
+  </body>
 </html>
